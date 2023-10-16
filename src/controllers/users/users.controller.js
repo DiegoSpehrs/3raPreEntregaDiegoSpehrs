@@ -27,7 +27,7 @@ class UsersController {
         const {username,password} = req.body;
         try {
             const user = await userService.findUserLogin(username, password);
-            req,session['username'] = user.username;
+            req.session['username'] = user.username;
             res.status(200).json({message: 'session created', user: user});  
         } catch (error) {
             res.status(400).json({message: error.message});

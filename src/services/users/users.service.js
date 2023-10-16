@@ -26,8 +26,10 @@ class UsersService{
     }
 
     async findUserLogin(username, password){
-        if(!username || !password) throw new Error('Sing up first');
+        console.log(username, password);
+        if(!username || !password) throw new Error('Some data is missing');
         const userDB = await usersMongo.findOne({username});
+        if(!userDB) throw new Error('singup first')
         const isPasswordValid = await compareData(password, userDB.password);
         if(!isPasswordValid) throw new Error('Username or Password not valid');
         return userDB
