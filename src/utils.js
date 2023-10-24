@@ -8,6 +8,6 @@ export const hashData = async(data)=>{
     return bcrypt.hash(data,10)
 }
 
-export const compareData = async(data, hasData)=>{
-    return bcrypt.compare(data,hasData)
+export const compareData = async(data, hashData)=>{
+    return bcrypt.compare(data,hashData)
 }

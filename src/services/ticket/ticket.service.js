@@ -1,16 +1,20 @@
 import {ticketMongo} from '../../DAL/DAOs/MongoDAOs/ticketMongo.dao.js';
-import {productsMongo} from '../../DAL/DAOs/MongoDAOs/productsMongo.dao.js';
+
 
 class TicketService {
 
-    async validateProductStock(product){
-      const {quantity, id} = product;
-      const productDb = await productsMongo.findById(id);
-      if(quantity <= productDb.stock){
-        const newStock = quantity - productDb.stock;
-        const result = await productsMongo.model.findById(id).updateOne({stock: newStock});
-        return result
+    async createTicket(obj){
+      const {pucharse, amount} = obj;
+      const code = await ticketMongo.codeGenerator();
+      const purchase_datetime = new Date() ;
+      const ticket = {
+        code: code,
+        purchase_datetime: purchase_datetime,
+        amount: amount,
+        pucharse: pucharse
       }
+      const newTicket = await ticketMongo.createTicket(ticket)
+      return newTicket
     }
 }
 

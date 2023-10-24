@@ -43,6 +43,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+
 app.use('/api/products',productsRouter)
 app.use('/api/cart',cartsRouter)
 app.use('/api/views',viewsRouter)

@@ -8,13 +8,14 @@ class UsersService{
         //const userDB = await usersMongo.findOne(username);
         if(!first_name || !last_name || !username || !password || !email) throw new Error('Some required data is missing');
         //if(userDB) throw new Error('user already exists');
-        const hasPassword = await hashData(password);
+        const hashPassword = await hashData(password);
+        user.password = hashPassword;
         if(filterAdmin === user.email) {
             user.role = 'admin';
-            const newUser = await usersMongo.createOne(user, {password:hasPassword});
+            const newUser = await usersMongo.createOne(user);
             return newUser;
         }else{
-            const newUser = await usersMongo.createOne(user,{password:hasPassword});
+            const newUser = await usersMongo.createOne(user);
             return newUser;
         }
     }
@@ -28,7 +29,7 @@ class UsersService{
     async findUserLogin(username, password){
         console.log(username, password);
         if(!username || !password) throw new Error('Some data is missing');
-        const userDB = await usersMongo.findOne({username});
+        const userDB = await usersMongo.findOne(username);
         if(!userDB) throw new Error('singup first')
         const isPasswordValid = await compareData(password, userDB.password);
         if(!isPasswordValid) throw new Error('Username or Password not valid');

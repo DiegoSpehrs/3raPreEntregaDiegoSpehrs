@@ -44,6 +44,10 @@ class CartsService {
         const response = await cartsMongo.model.findById(cid).updateOne({$push:{products:pid}});
         return response;
     }
+
+    async stockValidation(product){
+        
+    }
 }
 
 export const cartsService = new CartsService()

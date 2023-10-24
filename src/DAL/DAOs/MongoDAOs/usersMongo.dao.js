@@ -7,7 +7,7 @@ class UsersMongo extends BasicMongo {
     }
 
     async findOne(username) {
-        const response = await usersModel.findOne({username});
+        const response = await usersModel.findOne(username);
         if(!response) throw new Error('Users not found');
         return response;
     }

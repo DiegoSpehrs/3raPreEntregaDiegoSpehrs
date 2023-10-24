@@ -4,9 +4,11 @@ const ticketSchema = new mongoose.Schema({
     code:{
         type: String,
         unique: true,
+        required: true
     },
-    purchase_datatime:{
+    purchase_datetime:{
         type: Date,
+        unique: true,
     },
     amount:{
         type: Number,

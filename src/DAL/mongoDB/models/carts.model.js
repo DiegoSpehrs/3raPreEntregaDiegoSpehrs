@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const cartsSchema = new mongoose.Schema({
-    name:{
+    pucharse:{
         type:'string',
         require: true
     },
