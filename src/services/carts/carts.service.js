@@ -8,7 +8,7 @@ class CartsService {
     async getCartById(cid) {
         const cart = await cartsMongo.findById(cid);
         if(!cart) throw new Error('Cart not found'); 
-        const response = await cartsMongo.model.findById(cid).populate('products',['title', 'price', 'code', 'quantity']);
+        const response = await cartsMongo.model.findById(cid).populate('products');
         return response;
     }
     async createCart(cartData) {
@@ -45,8 +45,35 @@ class CartsService {
         return response;
     }
 
-    async stockValidation(product){
-        
+    async cartData(cid){
+        const cartData = await this.getCartById(cid);
+        const cartProducts = cartData.products;
+        const list = [];
+        cartProducts.map(e => {
+            const find = list.find(t => t.id === e.id)
+            if(find){
+                find.quantity = find.quantity + 1
+                find.total = find.price * find.quantity
+            }
+            else{
+                list.push(
+                    {
+                    id: e.id,
+                    title: e.title,
+                    price: e.price,
+                    total: e.total,
+                    quantity: 1
+                    }
+                )   
+
+            }
+        })
+        return list
+    }
+
+    async totalPriceCart(obj){
+        const total = obj.reduce((acum, e) => acum + e.total, 0)
+        return total
     }
 }
 
