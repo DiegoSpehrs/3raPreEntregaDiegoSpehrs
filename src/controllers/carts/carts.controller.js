@@ -59,6 +59,19 @@ class CartsController {
     }
   }
 
+  async cartWhitOutStock(cid, withOutStock) {
+    await cartsService.cartDelete(cid)
+
+    withOutStock.forEach(async e => {
+      const q = e.quantity
+      for (let i = 0; i<  q; i++) {
+        await cartsService.cartUpdate(cid, e.id)
+      }
+      
+    }
+    )
+  }
+
   async purchase (req, res){
     const {cid} = req.params;
     if (!req.user){
@@ -77,27 +90,16 @@ class CartsController {
       }
     })
     const stockValidate = await Promise.all(purchase);
-    const withOutStock = validateProductStock.filter(e => e,stock == 0)
-    const purchasePorducts = validateProductStock.filter(e=> e.stock != 0)
+    const withOutStock = stockValidate.filter(e => e,stock == 0)
+    const purchasePorducts = stockValidate.filter(e=> e.stock != 0)
     const totalAmount = purchasePorducts.reduce((acc,p) => acc + p.total, 0)
     req.purchaseProducts = purchasePorducts
     req.userEmail = req.user.email
     req.totalAmount = totalAmount
-    cartWhitOutStock(cid, withOutStock)
+    cartsController.cartWhitOutStock(cid, withOutStock)
   }
 
-  async cartWhitOutStock(cid, withOutStock) {
-    await cartsService.cartDelete(cid)
-
-    withOutStock.forEach(async e => {
-      const q = e.quantity
-      for (let i = 0; i<  q; i++) {
-        await cartsService.cartUpdate(cid, e.id)
-      }
-      
-    }
-    )
-  }
+  
   
 }
 
