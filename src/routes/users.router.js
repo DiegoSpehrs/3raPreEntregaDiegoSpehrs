@@ -1,15 +1,16 @@
 import { Router } from "express";
 import { usersController } from "../controllers/users/users.controller.js";
+import { cartsController } from "../controllers/carts/carts.controller.js";
 import passport from "passport";
 
 const router = Router();
 
-router.post('/singup', usersController.singupUser);
+router.post('/singup', cartsController.createcart,usersController.singupUser);
 
 router.get('/githubSignup',passport.authenticate('github',{scope: ['user:email']}));
 
 router.get('/github',passport.authenticate('github',{failureRedirect:'/api/views/singup'}),(req,res)=>{
-    req.session['username'] = req.user.username
+    req.session['email'] = req.user.email
     res.redirect('/api/home')
 });
 

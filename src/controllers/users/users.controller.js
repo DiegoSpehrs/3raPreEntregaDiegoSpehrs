@@ -12,7 +12,7 @@ class UsersController {
         }
     }
     async getDataUser(req,res) {
-        const user = await userService.findUser(req.session.username);
+        const user = await userService.findUser(req.session.email);
         const dataUser = {
             first_name: user.first_name,
             last_name: user.last_name,
@@ -24,11 +24,19 @@ class UsersController {
         res.render('clientHome',{user: dataUser});
     }
     async logInUser(req,res) {
-        const {username,password} = req.body;
+        const {email,password} = req.body;
         try {
-            const user = await userService.findUserLogin(username, password);
-            req.session['username'] = user.username;
-            res.render('clientHome',{user: user});
+            const user = await userService.findUserLogin({email, password});
+            const dataUser = {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                username: user.username,
+                email: user.email,
+                age: user.age,
+                role: user.role
+            }
+            req.session['email'] = user.email;
+            res.render('clientHome',{user: dataUser});
         } catch (error) {
             res.status(400).json({message: error.message});
         }  

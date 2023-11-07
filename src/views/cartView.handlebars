@@ -1,0 +1,24 @@
+<h1>Welcome to your cart</h1>
+<ul>
+    {{#if cart.length}}
+        <div>
+            {{#each cart}}
+            <div class="cart">
+                <h2>Title: {{this.title}}</h2>
+                <h3>ProdId: {{this.id}}</h3>
+                <p>Quantity: {{this.quantity}}</p>
+                <p>Price: ${{this.price}}</p>
+                <p>Total: ${{this.total}}</p>  
+            </div>
+            {{/each}}
+        </div>
+        <br>
+            <p>Total: ${{total}}</p>
+        <br>
+        <form action={{purchase}} method="get">
+            <input type="submit" value="PURCHASE">
+        </form>
+        {{else}}
+        <h2>Cart has not exist</h2> 
+    {{/if}}       
+</ul>

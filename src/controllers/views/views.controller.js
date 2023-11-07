@@ -1,4 +1,5 @@
 import { productsService } from "../../services/products/products.service.js";
+import { cartsService } from "../../services/carts/carts.service.js";
 
 class ViewsController {
     async homeRender(req,res){
@@ -20,6 +21,14 @@ class ViewsController {
     }
     clientHomeRender(req,res){
         res.render("clientHome");
+    }
+    
+    async cartRender(req,res){
+        console.log(req.session);
+        const cart = await cartsService.cartData(req.session.user.cartID);
+        const total = await cartsService.totalPriceCart(cart);
+        const purchase = `/api/carts/${req.session.user.cartId}/purchase`
+        res.render('cartView',{cart,total,purchase})
     }
 
 }

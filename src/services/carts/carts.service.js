@@ -1,4 +1,5 @@
 import {cartsMongo} from '../../DAL/DAOs/MongoDAOs/cartsMongo.dao.js';
+import {usersMongo} from '../../DAL/DAOs/MongoDAOs/usersMongo.dao.js'
 
 class CartsService {
     async getAllCarts(){
@@ -6,14 +7,15 @@ class CartsService {
         return response;
     }
     async getCartById(cid) {
+        console.log(cid);
         const cart = await cartsMongo.findById(cid);
         if(!cart) throw new Error('Cart not found'); 
         const response = await cartsMongo.model.findById(cid).populate('products');
         return response;
     }
     async createCart(cartData) {
-        const {name, description} = cartData;
-        if(!name || !description) throw new Error('some required data is missing');
+        const {pucharse} = cartData;
+        if(!pucharse ) throw new Error('some required data is missing');
         const response =await cartsMongo.createOne(cartData);
         return response;
     }
@@ -74,6 +76,10 @@ class CartsService {
     async totalPriceCart(obj){
         const total = obj.reduce((acum, e) => acum + e.total, 0)
         return total
+    }
+
+    async addCartToUser(cartId, email){
+        await usersMongo.addCart(cartId, email);
     }
 }
 

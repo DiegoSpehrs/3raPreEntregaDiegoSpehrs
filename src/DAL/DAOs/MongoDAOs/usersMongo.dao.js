@@ -6,10 +6,20 @@ class UsersMongo extends BasicMongo {
         super(usersModel);
     }
 
-    async findOne(username) {
-        const response = await usersModel.findOne(username);
+    async findOne(email) {
+        console.log(email);
+        const response = await usersModel.findOne(email);
         if(!response) throw new Error('Users not found');
         return response;
+    }
+
+
+    async addCart(cartId, email) {
+        const user = await usersModel.findOne(email);
+        if(!user) throw new Error('User not found');
+        user.cartId = cartId;
+        console.log(user);
+        await usersModel.findOneAndUpdate({email},user);
     }
 }
 

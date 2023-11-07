@@ -12,6 +12,7 @@ class UsersService{
         user.password = hashPassword;
         if(filterAdmin === user.email) {
             user.role = 'admin';
+
             const newUser = await usersMongo.createOne(user);
             return newUser;
         }else{
@@ -20,20 +21,29 @@ class UsersService{
         }
     }
 
-    async findUser(username){
-       const user = await usersMongo.findOne({username});
+    async findUser(email){
+       const user = await usersMongo.findOne({email});
        if(!user) throw new Error('User not found')
        return user;
     }
 
-    async findUserLogin(username, password){
-        console.log(username, password);
-        if(!username || !password) throw new Error('Some data is missing');
-        const userDB = await usersMongo.findOne(username);
+    async findUserLogin(obj){
+        const {email, password} = obj;
+        if(!email || !password) throw new Error('Some data is missing');
+        const userDB = await usersMongo.findOne({email});
+        console.log(userDB);
         if(!userDB) throw new Error('singup first')
         const isPasswordValid = await compareData(password, userDB.password);
-        if(!isPasswordValid) throw new Error('Username or Password not valid');
+        if(!isPasswordValid) throw new Error('Email or Password not valid');
         return userDB
+    }
+
+    logInAuthentication(roles){
+        return (req,res)=>{
+            const rol = req.session.role
+            console.log(rol)
+            if(!roles.includes(rol)) throw new Error("you don't have permissions")
+        }
     }
 }
 

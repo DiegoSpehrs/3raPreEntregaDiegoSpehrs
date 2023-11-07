@@ -1,7 +1,7 @@
 import { ticketModel } from "../../mongoDB/models/ticket.model.js";
-import {basicMongo} from './basicMongo.dao.js';
+import BasicMongo from './basicMongo.dao.js';
 
-class TicketMongo extends basicMongo {
+class TicketMongo extends BasicMongo {
     constructor(){
         super(ticketModel);
     }

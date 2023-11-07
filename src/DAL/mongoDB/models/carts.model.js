@@ -5,10 +5,6 @@ const cartsSchema = new mongoose.Schema({
         type:'string',
         require: true
     },
-    descripton:{
-        type:'string',
-        require: true
-    },
     products:[
        {
         type: mongoose.Schema.Types.ObjectId,

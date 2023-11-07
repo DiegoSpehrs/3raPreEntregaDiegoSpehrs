@@ -1,10 +1,12 @@
 import { cartsService } from '../../services/carts/carts.service.js';
 import { productsMongo } from '../../DAL/DAOs/MongoDAOs/productsMongo.dao.js';
-import { validateProductStock } from '../../middlewares/ticketMiddleware.js';
-o.dao.js
+
+
 class CartsController {
   async createcart(req,res){
     const cartData = req.body;
+    cartData.pucharse = cartData.email;
+    console.log(cartData)
     try{
          const createCart = await cartsService.createCart(cartData);
          res.status(200).json({message:'Cart created successfully', cart:createCart})
@@ -90,11 +92,11 @@ class CartsController {
       }
     })
     const stockValidate = await Promise.all(purchase);
-    const withOutStock = stockValidate.filter(e => e,stock == 0)
+    const withOutStock = stockValidate.filter(e => e.stock == 0)
     const purchasePorducts = stockValidate.filter(e=> e.stock != 0)
     const totalAmount = purchasePorducts.reduce((acc,p) => acc + p.total, 0)
     req.purchaseProducts = purchasePorducts
-    req.userEmail = req.user.email
+    req.userEmail = req.session.user.email
     req.totalAmount = totalAmount
     cartsController.cartWhitOutStock(cid, withOutStock)
   }
