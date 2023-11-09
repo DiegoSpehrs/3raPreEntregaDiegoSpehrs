@@ -6,9 +6,9 @@ import { userService } from "../../services/users/users.service.js";
 import { compareData } from '../../utils.js'
 
 passport.use('login', new LocalStrategy(
-    async function (username, password, done) {
+    async function (email, password, done) {
         try {
-            const userDb = await userService.findUser(username)
+            const userDb = await userService.findUser(email)
             if (!userDb) {
                 return done(null, false)
             }

@@ -25,6 +25,7 @@ class UsersController {
     }
     async logInUser(req,res) {
         const {email,password} = req.body;
+        console.log({email,password});
         try {
             const user = await userService.findUserLogin({email, password});
             const dataUser = {

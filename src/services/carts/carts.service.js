@@ -13,10 +13,10 @@ class CartsService {
         const response = await cartsMongo.model.findById(cid).populate('products');
         return response;
     }
-    async createCart(cartData) {
-        const {pucharse} = cartData;
+    async createCart(pucharse) {
+        console.log(pucharse);
         if(!pucharse ) throw new Error('some required data is missing');
-        const response =await cartsMongo.createOne(cartData);
+        const response = await cartsMongo.createOne({pucharse});
         return response;
     }
     async cartDelete(cid) {

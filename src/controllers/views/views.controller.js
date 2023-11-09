@@ -1,5 +1,6 @@
 import { productsService } from "../../services/products/products.service.js";
 import { cartsService } from "../../services/carts/carts.service.js";
+import {usersMongo} from "../../DAL/DAOs/MongoDAOs/usersMongo.dao.js"
 
 class ViewsController {
     async homeRender(req,res){
@@ -24,10 +25,18 @@ class ViewsController {
     }
     
     async cartRender(req,res){
-        console.log(req.session);
-        const cart = await cartsService.cartData(req.session.user.cartID);
+        const pucharse = req.session.email;
+        const newCart = await cartsService.createCart(pucharse);
+        console.log('carrito creado',newCart);
+        req.session['cartId'] = newCart.id;
+        console.log('control de que se agrege cartId al session',req.session);
+        const {cartId, email} = req.session;
+        console.log(cartId,email);
+        const linkCart = await usersMongo.addCart({cartId, email});
+        console.log('control de linkeo de carrito al user',linkCart);
+        const cart = await cartsService.cartData(cartId);
         const total = await cartsService.totalPriceCart(cart);
-        const purchase = `/api/carts/${req.session.user.cartId}/purchase`
+        const purchase = `/api/carts/${cartId}/purchase`
         res.render('cartView',{cart,total,purchase})
     }
 

@@ -16,7 +16,7 @@ router.get('/adminHome', viewsController.adminHomeRender);
 
 router.get('/clientHome', viewsController.clientHomeRender);
 
-router.get('/cart', viewsController.cartRender);
+router.get('/cart', viewsController.cartRender); 
 
 
 
