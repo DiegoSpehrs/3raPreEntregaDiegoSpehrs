@@ -25,6 +25,9 @@ class ViewsController {
     }
     
     async cartRender(req,res){
+        const {email, cartId} = req.session;
+        const user = await usersMongo.findOne({email});
+      if(user.cartId === null){
         const pucharse = req.session.email;
         const newCart = await cartsService.createCart(pucharse);
         console.log('carrito creado',newCart);
@@ -36,8 +39,21 @@ class ViewsController {
         console.log('control de linkeo de carrito al user',linkCart);
         const cart = await cartsService.cartData(cartId);
         const total = await cartsService.totalPriceCart(cart);
-        const purchase = `/api/carts/${cartId}/purchase`
-        res.render('cartView',{cart,total,purchase})
+        const pucharseRout = `/api/carts/${cartId}/purchase`
+        res.render('cartView',{cart,total,pucharseRout})
+      }else{
+        console.log('No se activo el if');
+        req.session['cartId'] = user.cartId;
+        console.log('control de que se agrege cartId al session',req.session);
+        const {cartId, email} = req.session;
+        console.log(cartId,email);
+        const linkCart = await usersMongo.addCart({cartId, email});
+        console.log('control de linkeo de carrito al user',linkCart);
+        const cart = await cartsService.cartData(cartId);
+        const total = await cartsService.totalPriceCart(cart);
+        const pucharse = `/api/carts/${cartId}/pucharse`
+        res.render('cartView',{cart,total,pucharse}) 
+        }
     }
 
 }

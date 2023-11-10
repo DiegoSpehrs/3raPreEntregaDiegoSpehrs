@@ -15,15 +15,16 @@ class UsersMongo extends BasicMongo {
 
 
     async addCart(obj) {
-        const cartId = obj.cartId;
-        const {email} = obj.email;
+        console.log('interior obj',obj);
+        const {email, cartId} = obj;
         console.log('confirmacion de cartId en la funcion addCart',cartId, email);
-        const user = await usersModel.findOne(email);
-        if(!user) throw new Error('User not found');
-        user.cartId = cartId;
-        console.log(user);
-        await usersModel.findOneAndUpdate({email},user);
-        return ("cart linked successfully")
+        const userMod = await usersModel.findOne({email});
+        if(!userMod) throw new Error('User not found');
+        userMod.cartId = cartId;
+        console.log(userMod);
+        const test = await usersModel.findOneAndUpdate({email},{cartId},{new: true});
+        console.log(test);
+        return ("cart linked successfully", userMod)
     }
 }
 

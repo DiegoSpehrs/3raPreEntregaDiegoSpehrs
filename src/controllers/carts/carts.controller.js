@@ -74,7 +74,7 @@ class CartsController {
     )
   }
 
-  async purchase (req, res){
+  async pucharse (req, res){
     const {cid} = req.params;
     if (!req.user){
       res.status(400).json({message: 'this user dont exist'})

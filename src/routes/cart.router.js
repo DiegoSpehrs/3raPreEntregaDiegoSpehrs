@@ -17,6 +17,6 @@ router.put('/:cid/products/:pid', cartsController.updateProduct);
 
 router.delete('/:cid', cartsController.cartDelete);
 
-router.get('/:cid/purchase', cartsController.purchase, ticketService.createTicket)
+router.post('/:cid/pucharse', cartsController.pucharse, ticketService.createTicket);
 
 export default router

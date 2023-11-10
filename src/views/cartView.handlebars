@@ -15,8 +15,8 @@
         <br>
             <p>Total: ${{total}}</p>
         <br>
-        <form action={{purchase}} method="get">
-            <input type="submit" value="PURCHASE">
+        <form action={{pucharse}} method="post">
+            <button onclick="location.href=`/api/cart/${{pucharse}}/pucharse`" > pucharse </button>
         </form>
         {{else}}
         <h2>Cart has not exist</h2> 

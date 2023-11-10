@@ -49,10 +49,13 @@ class CartsService {
 
     async cartData(cid){
         const cartData = await this.getCartById(cid);
+        console.log('interior cartData',cartData);
         const cartProducts = cartData.products;
+        console.log('interiror de cartProducts',cartProducts);
         const list = [];
         cartProducts.map(e => {
             const find = list.find(t => t.id === e.id)
+            console.log('Interiror de find',find);
             if(find){
                 find.quantity = find.quantity + 1
                 find.total = find.price * find.quantity
@@ -63,18 +66,21 @@ class CartsService {
                     id: e.id,
                     title: e.title,
                     price: e.price,
-                    total: e.total,
+                    total: e.price * e.quantity,
                     quantity: 1
                     }
                 )   
 
             }
         })
+        console.log('interior de list', list);
         return list
     }
 
     async totalPriceCart(obj){
+        console.log(obj);
         const total = obj.reduce((acum, e) => acum + e.total, 0)
+        console.log(total);
         return total
     }
 
