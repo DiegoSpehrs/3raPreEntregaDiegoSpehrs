@@ -51,7 +51,7 @@ class ViewsController {
         console.log('control de linkeo de carrito al user',linkCart);
         const cart = await cartsService.cartData(cartId);
         const total = await cartsService.totalPriceCart(cart);
-        const pucharse = `/api/carts/${cartId}/pucharse`
+        const pucharse = `/api/cart/${cartId}/pucharse`
         res.render('cartView',{cart,total,pucharse}) 
         }
     }

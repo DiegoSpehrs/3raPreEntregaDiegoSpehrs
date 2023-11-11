@@ -15,7 +15,7 @@
         <br>
             <p>Total: ${{total}}</p>
         <br>
-        <form action={{pucharse}} method="post">
+        <form action={{pucharse}} method="get">
             <button onclick="location.href=`/api/cart/${{pucharse}}/pucharse`" > pucharse </button>
         </form>
         {{else}}

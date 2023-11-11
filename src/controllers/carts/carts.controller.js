@@ -76,10 +76,11 @@ class CartsController {
 
   async pucharse (req, res){
     const {cid} = req.params;
-    if (!req.user){
-      res.status(400).json({message: 'this user dont exist'})
-    }
+    const sessionData = await cartsService.getCartById(cid);
+    console.log('sessionData', sessionData);
+    req.session['email'] = sessionData.pucharse;
     const cart = await cartsService.cartData(cid);
+    console.log('interior de cart', cart);
     const purchase = cart.map(async e => {
       const prod = await productsMongo.findById(e.id)
       if (prod.stock < e.quantity) {
@@ -92,11 +93,12 @@ class CartsController {
       }
     })
     const stockValidate = await Promise.all(purchase);
+    console.log('linea 96',stockValidate);
     const withOutStock = stockValidate.filter(e => e.stock == 0)
     const purchasePorducts = stockValidate.filter(e=> e.stock != 0)
     const totalAmount = purchasePorducts.reduce((acc,p) => acc + p.total, 0)
     req.purchaseProducts = purchasePorducts
-    req.userEmail = req.session.user.email
+    req.userEmail = req.session.email
     req.totalAmount = totalAmount
     cartsController.cartWhitOutStock(cid, withOutStock)
   }
