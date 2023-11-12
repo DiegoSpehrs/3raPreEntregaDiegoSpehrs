@@ -7,7 +7,6 @@ class CartsService {
         return response;
     }
     async getCartById(cid) {
-        console.log(cid);
         const cart = await cartsMongo.findById(cid);
         if(!cart) throw new Error('Cart not found'); 
         const response = await cartsMongo.model.findById(cid).populate('products');
@@ -49,13 +48,10 @@ class CartsService {
 
     async cartData(cid){
         const cartData = await this.getCartById(cid);
-        console.log('interior cartData',cartData);
         const cartProducts = cartData.products;
-        console.log('interiror de cartProducts',cartProducts);
         const list = [];
         cartProducts.map(e => {
             const find = list.find(t => t.id === e.id)
-            console.log('Interiror de find',find);
             if(find){
                 find.quantity = find.quantity + 1
                 find.total = find.price * find.quantity

@@ -1,5 +1,6 @@
 import { cartsService } from '../../services/carts/carts.service.js';
 import { productsMongo } from '../../DAL/DAOs/MongoDAOs/productsMongo.dao.js';
+import { usersMongo } from '../../DAL/DAOs/MongoDAOs/usersMongo.dao.js';
 
 
 class CartsController {
@@ -62,8 +63,6 @@ class CartsController {
   }
 
   async cartWhitOutStock(cid, withOutStock) {
-    await cartsService.cartDelete(cid)
-
     withOutStock.forEach(async e => {
       const q = e.quantity
       for (let i = 0; i<  q; i++) {
@@ -72,6 +71,7 @@ class CartsController {
       
     }
     )
+    await cartsService.cartDelete(cid)
   }
 
   async pucharse (req, res){
@@ -90,17 +90,30 @@ class CartsController {
           quantity: e.quantity,
           title: prod.title,
         }
+      }else{
+        prod.stock = prod.stock - e.quantity;
+        await productsMongo.updateOne(e.id, {stock: prod.stock});
+        return {
+          quantity: e.quantity,
+          title: e.title,
+          price: e.price,
+          total: e.total,
+        }
       }
     })
     const stockValidate = await Promise.all(purchase);
-    console.log('linea 96',stockValidate);
-    const withOutStock = stockValidate.filter(e => e.stock == 0)
-    const purchasePorducts = stockValidate.filter(e=> e.stock != 0)
-    const totalAmount = purchasePorducts.reduce((acc,p) => acc + p.total, 0)
-    req.purchaseProducts = purchasePorducts
-    req.userEmail = req.session.email
-    req.totalAmount = totalAmount
-    cartsController.cartWhitOutStock(cid, withOutStock)
+    console.log('linea 103',stockValidate);
+    const withOutStock = stockValidate.filter(e => e.stock == 0);
+    console.log('withOutStock', withOutStock);
+    const purchasePorducts = stockValidate.filter(e=> e.stock != 0);
+    console.log('purchaseProducts', purchasePorducts);
+    const totalAmount = purchasePorducts.reduce((acc,p) => acc + p.total, 0);
+    console.log('totalAmount', totalAmount);
+    req.session.purchaseProducts = purchasePorducts;
+    req.session.userEmail = req.session.email;
+    req.session.totalAmount = totalAmount;
+    console.log(req.session);
+    cartsController.cartWhitOutStock(cid, withOutStock);
   }
 
   
