@@ -1,6 +1,7 @@
 import { cartsService } from '../../services/carts/carts.service.js';
 import { productsMongo } from '../../DAL/DAOs/MongoDAOs/productsMongo.dao.js';
 import { usersMongo } from '../../DAL/DAOs/MongoDAOs/usersMongo.dao.js';
+import { ticketService } from '../../services/ticket/ticket.service.js';
 
 
 class CartsController {
@@ -74,7 +75,7 @@ class CartsController {
     await cartsService.cartDelete(cid)
   }
 
-  async pucharse (req, res){
+  async pucharse (req, res, next){
     const {cid} = req.params;
     const sessionData = await cartsService.getCartById(cid);
     console.log('sessionData', sessionData);
@@ -110,14 +111,12 @@ class CartsController {
     const totalAmount = purchasePorducts.reduce((acc,p) => acc + p.total, 0);
     console.log('totalAmount', totalAmount);
     req.session.purchaseProducts = purchasePorducts;
-    req.session.userEmail = req.session.email;
-    req.session.totalAmount = totalAmount;
+    req.session['totalAmount'] = totalAmount;
     console.log(req.session);
     cartsController.cartWhitOutStock(cid, withOutStock);
+    
+    next();
   }
-
-  
-  
 }
 
 export const cartsController = new CartsController();

@@ -1,16 +1,18 @@
 import {ticketMongo} from '../../DAL/DAOs/MongoDAOs/ticketMongo.dao.js';
+import Randomstring from 'randomstring';
 
 
 class TicketService {
 
-    async createTicket(obj){
-      const {pucharse, amount} = obj;
-      const code = await ticketMongo.codeGenerator();
+    async createTicket(req,res){
+      const totalAmount = req.session.totalAmount;
+      const pucharse = req.session.email;
+      const code = Randomstring.generate();
       const purchase_datetime = new Date() ;
       const ticket = {
         code: code,
         purchase_datetime: purchase_datetime,
-        amount: amount,
+        totalAmount: totalAmount,
         pucharse: pucharse
       }
       const newTicket = await ticketMongo.createTicket(ticket)

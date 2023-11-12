@@ -11,16 +11,7 @@ class TicketMongo extends BasicMongo {
         console.log(newTicket);
         return newTicket;
        
-    }
-    
-    async codeGenerator(){
-        var caracteres = "abcdefghijkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ2346789";
-       var code = "";
-       for (i=0; i<20; i++) code += caracteres.charAt(Math.floor(Math.random()*caracteres.length)); 
-       return code;
-    }
-
-    
+    } 
 }
 
 
