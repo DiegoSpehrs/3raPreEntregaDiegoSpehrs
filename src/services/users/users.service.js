@@ -39,10 +39,11 @@ class UsersService{
     }
 
     logInAuthentication(roles){
-        return (req,res)=>{
+        return (req,res, next)=>{
             const rol = req.session.role
             console.log(rol)
             if(!roles.includes(rol)) throw new Error("you don't have permissions")
+            next()
         }
     }
 }

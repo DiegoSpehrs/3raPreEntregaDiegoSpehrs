@@ -1,4 +1,5 @@
 import { userService } from '../../services/users/users.service.js';
+import { userDTO } from '../../DAL/DTO/userDTO.js';
 
 
 class UsersController {
@@ -13,13 +14,14 @@ class UsersController {
     }
     async getDataUser(req,res) {
         const user = await userService.findUser(req.session.email);
+        const safeUser = userDTO(user);
         const dataUser = {
-            first_name: user.first_name,
-            last_name: user.last_name,
-            username: user.username,
-            email: user.email,
-            age: user.age,
-            role: user.role
+            first_name: safeUser.first_name,
+            last_name: safeUser.last_name,
+            username: safeUser.username,
+            email: safeUser.email,
+            age: safeUser.age,
+            role: safeUser.role
         }
         res.render('clientHome',{user: dataUser});
     }
@@ -28,13 +30,14 @@ class UsersController {
         console.log({email,password});
         try {
             const user = await userService.findUserLogin({email, password});
+            const safeUser = userDTO(user);
             const dataUser = {
-                first_name: user.first_name,
-                last_name: user.last_name,
-                username: user.username,
-                email: user.email,
-                age: user.age,
-                role: user.role
+                first_name: safeUser.first_name,
+                last_name: safeUser.last_name,
+                username: safeUser.username,
+                email: safeUser.email,
+                age: safeUser.age,
+                role: safeUser.role
             }
             req.session['email'] = user.email;
             res.render('clientHome',{user: dataUser});

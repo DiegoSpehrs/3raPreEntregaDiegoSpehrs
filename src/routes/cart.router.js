@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { cartsController } from "../controllers/carts/carts.controller.js";
 import { ticketService } from "../services/ticket/ticket.service.js";
+import { UserService, userService } from "../services/users/users.service.js";
 
 
 const router = Router();
 
 router.post('/', cartsController.createcart);
 
-router.post('/:cid/products/:pid', cartsController.addProduct);
+router.post('/:cid/products/:pid', userService.logInAuthentication(['user']), cartsController.addProduct);
 
 router.delete('/:cid/products/:pid', cartsController.productDelete);
 
